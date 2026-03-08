@@ -1,13 +1,51 @@
 import { motion } from "framer-motion";
-import { Video } from "lucide-react";
+import { Video, Play } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
-const SYSTEM_FOLDERS: Record<string, { folderId: string; label: string }> = {
-  respiratory: { folderId: "18VjBffBCLCeB23dAoS1l3lDBYgG2CoCe", label: "呼吸系統" },
-  circulatory: { folderId: "1wE5wp8Y8IKiYyZjxIb9RHLTxTEvzECZj", label: "循環系統" },
-  digestive: { folderId: "1CeKHYcTjdSrfphAThOwG7HoTqCBH1eT0", label: "消化系統" },
-  nervous: { folderId: "1hn7QMZWCMlCfk8k1MbcnG0j4flrnqOT0", label: "神經系統" },
-  urinary: { folderId: "1KBrXy-dKE7WKsGbu8oEjF8gJvHd7MNhN", label: "排泄與泌尿系統" },
+interface VideoItem {
+  title: string;
+  fileId: string;
+}
+
+const SYSTEM_VIDEOS: Record<string, { label: string; videos: VideoItem[] }> = {
+  respiratory: {
+    label: "呼吸系統",
+    videos: [
+      { title: "肩周炎、肩袖損傷、Slap損傷到底是怎麼回事？", fileId: "" },
+      { title: "過敏性鼻炎為什麼拖著拖著？", fileId: "" },
+    ],
+  },
+  circulatory: {
+    label: "循環系統",
+    videos: [
+      { title: "90%的腰疼都不是腰突", fileId: "" },
+    ],
+  },
+  digestive: {
+    label: "消化系統",
+    videos: [
+      { title: "胃炎到底是哪裡出問題了？", fileId: "" },
+    ],
+  },
+  nervous: {
+    label: "神經系統",
+    videos: [
+      { title: "頭疼得想撞牆", fileId: "" },
+      { title: "女性下腹痛", fileId: "" },
+    ],
+  },
+  urinary: {
+    label: "排泄與泌尿系統",
+    videos: [],
+  },
+};
+
+const FOLDER_URLS: Record<string, string> = {
+  respiratory: "https://drive.google.com/drive/folders/18VjBffBCLCeB23dAoS1l3lDBYgG2CoCe",
+  circulatory: "https://drive.google.com/drive/folders/1wE5wp8Y8IKiYyZjxIb9RHLTxTEvzECZj",
+  digestive: "https://drive.google.com/drive/folders/1CeKHYcTjdSrfphAThOwG7HoTqCBH1eT0",
+  nervous: "https://drive.google.com/drive/folders/1hn7QMZWCMlCfk8k1MbcnG0j4flrnqOT0",
+  urinary: "https://drive.google.com/drive/folders/1KBrXy-dKE7WKsGbu8oEjF8gJvHd7MNhN",
 };
 
 interface ExcelDownloadSectionProps {
@@ -16,11 +54,10 @@ interface ExcelDownloadSectionProps {
 
 export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
   const { user } = useAuth();
-  const folder = SYSTEM_FOLDERS[systemId];
+  const system = SYSTEM_VIDEOS[systemId];
+  const folderUrl = FOLDER_URLS[systemId];
 
-  if (!user || !folder) return null;
-
-  const embedUrl = `https://drive.google.com/embeddedfolderview?id=${folder.folderId}#list`;
+  if (!user || !system) return null;
 
   return (
     <motion.div
@@ -31,18 +68,28 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
     >
       <div className="flex items-center gap-2 mb-4">
         <Video className="h-5 w-5 text-primary" />
-        <h2 className="font-display text-xl font-bold">知識影片</h2>
+        <h2 className="font-display text-xl font-bold text-foreground">知識影片</h2>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-border">
-        <iframe
-          src={embedUrl}
-          className="w-full bg-background"
-          style={{ height: "300px", border: "none" }}
-          title={`${folder.label}影片列表`}
-          allow="autoplay"
-        />
-      </div>
+      {system.videos.length > 0 ? (
+        <ul className="space-y-2">
+          {system.videos.map((video, index) => (
+            <li key={index}>
+              <a
+                href={folderUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted/50"
+              >
+                <Play className="h-4 w-4 shrink-0 text-primary" />
+                <span className="text-sm text-foreground">{video.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-sm text-muted-foreground">尚未新增影片</p>
+      )}
     </motion.div>
   );
 }
