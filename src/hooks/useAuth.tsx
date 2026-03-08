@@ -10,6 +10,8 @@ interface AuthContextType {
   isAdmin: boolean;
   isEditMode: boolean;
   setEditMode: (v: boolean) => void;
+  isPreviewingAsMember: boolean;
+  setPreviewingAsMember: (v: boolean) => void;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -20,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   isEditMode: false,
   setEditMode: () => {},
+  isPreviewingAsMember: false,
+  setPreviewingAsMember: () => {},
   loading: true,
   signOut: async () => {},
 });
@@ -29,8 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isEditMode, setEditMode] = useState(false);
+  const [isPreviewingAsMember, setPreviewingAsMember] = useState(false);
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  const isAdmin = !isPreviewingAsMember && user?.email === ADMIN_EMAIL;
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -51,10 +56,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     await supabase.auth.signOut();
     setEditMode(false);
+    setPreviewingAsMember(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isAdmin, isEditMode, setEditMode, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, isAdmin, isEditMode, setEditMode, isPreviewingAsMember, setPreviewingAsMember, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

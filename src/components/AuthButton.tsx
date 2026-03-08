@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { LogIn, LogOut, Pencil, PencilOff } from "lucide-react";
+import { LogIn, LogOut, Pencil, PencilOff, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export function AuthButton() {
-  const { user, isAdmin, isEditMode, setEditMode, signOut, loading } = useAuth();
+  const { user, isAdmin, isEditMode, setEditMode, isPreviewingAsMember, setPreviewingAsMember, signOut, loading } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
 
   const handleGoogleLogin = async () => {
@@ -49,8 +49,24 @@ export function AuthButton() {
     );
   }
 
+  const isRealAdmin = user?.email === "leezhixing117@gmail.com";
+
   return (
     <div className="flex items-center gap-2">
+      {isRealAdmin && (
+        <Button
+          size="sm"
+          variant={isPreviewingAsMember ? "secondary" : "outline"}
+          onClick={() => {
+            setPreviewingAsMember(!isPreviewingAsMember);
+            if (!isPreviewingAsMember) setEditMode(false);
+          }}
+          className="gap-1.5"
+        >
+          {isPreviewingAsMember ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          {isPreviewingAsMember ? "返回管理員" : "會員視角"}
+        </Button>
+      )}
       {isAdmin && (
         <Button
           size="sm"
