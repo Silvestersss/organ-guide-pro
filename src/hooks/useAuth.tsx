@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isEditMode, setEditMode] = useState(false);
   const [isPreviewingAsMember, setPreviewingAsMember] = useState(false);
 
-  const isAdmin = !isPreviewingAsMember && user?.email === ADMIN_EMAIL;
+  const isAdmin = !isPreviewingAsMember && !!user?.email && ADMIN_EMAILS.includes(user.email);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
