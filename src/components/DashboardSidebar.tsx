@@ -43,11 +43,6 @@ export function DashboardSidebar({ activeSystem, unlockedSystems, onSelectSystem
                 <p className="font-medium">{sys.name}</p>
                 <p className="truncate text-xs text-muted-foreground">{sys.nameEn}</p>
               </div>
-              {isUnlocked ? (
-                <Check className="h-4 w-4 shrink-0 text-medical-green" />
-              ) : (
-                <Lock className="h-4 w-4 shrink-0 text-muted-foreground" />
-              )}
             </button>
           );
         })}

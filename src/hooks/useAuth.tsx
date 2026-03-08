@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from "react
 import { supabase } from "@/integrations/supabase/client";
 import type { User, Session } from "@supabase/supabase-js";
 
-const ADMIN_EMAIL = "leezhixing117@gmail.com";
+const ADMIN_EMAILS = ["leezhixing117@gmail.com", "amypy117@gmail.com"];
 
 interface AuthContextType {
   user: User | null;
@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isEditMode, setEditMode] = useState(false);
   const [isPreviewingAsMember, setPreviewingAsMember] = useState(false);
 
-  const isAdmin = !isPreviewingAsMember && user?.email === ADMIN_EMAIL;
+  const isAdmin = !isPreviewingAsMember && !!user?.email && ADMIN_EMAILS.includes(user.email);
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
