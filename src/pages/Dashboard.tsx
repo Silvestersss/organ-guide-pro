@@ -113,7 +113,10 @@ export default function Dashboard() {
           {currentSystem ? (
             <OrganSystemContent key={currentSystem.id} system={currentSystem} />
           ) : (
-            <WelcomeContent unlockedCount={unlockedSystems.size} onSelectSystem={handleSelectSystem} />
+            <>
+              <WelcomeContent unlockedCount={unlockedSystems.size} onSelectSystem={handleSelectSystem} />
+              {user && <div className="mt-8"><MembershipApply /></div>}
+            </>
           )}
         </div>
       </main>
