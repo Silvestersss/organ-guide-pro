@@ -221,7 +221,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
             <Crown className="h-3.5 w-3.5" /> 付費影片
           </p>
           {canViewPaid ? (
-            <ul className="space-y-2">{paidVideos.map(renderVideoItem)}</ul>
+            <ul className="space-y-2">{paidVideos.map((v, i) => renderVideoItem(v, i, paidVideos))}</ul>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-6 text-center">
               <Lock className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
