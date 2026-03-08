@@ -3,6 +3,7 @@ import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
 import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
+import { VideoTableSection } from "@/components/VideoTableSection";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
@@ -118,6 +119,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
           ))}
         </div>
       </motion.div>
+
+      {/* Video Table (logged-in only) */}
+      <VideoTableSection systemId={system.id} />
 
       {/* Excel Download (logged-in only) */}
       <ExcelDownloadSection systemId={system.id} />
