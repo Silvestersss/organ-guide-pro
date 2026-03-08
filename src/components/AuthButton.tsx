@@ -49,8 +49,24 @@ export function AuthButton() {
     );
   }
 
+  const isRealAdmin = user?.email === "leezhixing117@gmail.com";
+
   return (
     <div className="flex items-center gap-2">
+      {isRealAdmin && (
+        <Button
+          size="sm"
+          variant={isPreviewingAsMember ? "secondary" : "outline"}
+          onClick={() => {
+            setPreviewingAsMember(!isPreviewingAsMember);
+            if (!isPreviewingAsMember) setEditMode(false);
+          }}
+          className="gap-1.5"
+        >
+          {isPreviewingAsMember ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+          {isPreviewingAsMember ? "返回管理員" : "會員視角"}
+        </Button>
+      )}
       {isAdmin && (
         <Button
           size="sm"
