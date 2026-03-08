@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
+import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
