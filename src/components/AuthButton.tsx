@@ -49,7 +49,8 @@ export function AuthButton() {
     );
   }
 
-  const isRealAdmin = user?.email === "leezhixing117@gmail.com";
+  const ADMIN_EMAILS = ["leezhixing117@gmail.com", "amypy117@gmail.com"];
+  const isRealAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email);
 
   return (
     <div className="flex items-center gap-2">
