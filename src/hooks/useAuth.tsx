@@ -22,6 +22,8 @@ const AuthContext = createContext<AuthContextType>({
   isAdmin: false,
   isEditMode: false,
   setEditMode: () => {},
+  isPreviewingAsMember: false,
+  setPreviewingAsMember: () => {},
   loading: true,
   signOut: async () => {},
 });
