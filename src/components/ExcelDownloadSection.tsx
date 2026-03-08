@@ -210,7 +210,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       {freeVideos.length > 0 && (
         <div className="mb-4">
           <p className="text-xs text-muted-foreground mb-2 font-medium">免費影片</p>
-          <ul className="space-y-2">{freeVideos.map(renderVideoItem)}</ul>
+          <ul className="space-y-2">{freeVideos.map((v, i) => renderVideoItem(v, i, freeVideos))}</ul>
         </div>
       )}
 
