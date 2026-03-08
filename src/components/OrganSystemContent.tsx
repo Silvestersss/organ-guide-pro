@@ -130,8 +130,15 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
       </motion.div>
 
 
-      {/* Excel Download (logged-in only) */}
-      <ExcelDownloadSection systemId={system.id} />
+      {/* Excel Download (membership-gated) */}
+      {hasVideoAccess ? (
+        <ExcelDownloadSection systemId={system.id} />
+      ) : user ? (
+        <motion.div variants={fadeUp} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card p-6 text-center">
+          <Lock className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+          <p className="text-sm text-muted-foreground">此系統的知識影片需要對應會員級別才能查看</p>
+        </motion.div>
+      ) : null}
 
       {/* Custom Links */}
       <CustomLinksSection systemId={system.id} />
