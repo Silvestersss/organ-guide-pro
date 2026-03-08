@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 export function AuthButton() {
-  const { user, isAdmin, isEditMode, setEditMode, signOut, loading } = useAuth();
+  const { user, isAdmin, isEditMode, setEditMode, isPreviewingAsMember, setPreviewingAsMember, signOut, loading } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
 
   const handleGoogleLogin = async () => {

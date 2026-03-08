@@ -10,6 +10,8 @@ interface AuthContextType {
   isAdmin: boolean;
   isEditMode: boolean;
   setEditMode: (v: boolean) => void;
+  isPreviewingAsMember: boolean;
+  setPreviewingAsMember: (v: boolean) => void;
   loading: boolean;
   signOut: () => Promise<void>;
 }
