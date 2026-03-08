@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
+import { AlertTriangle, Heart, Lightbulb, Sparkles, Lock } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
 import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
-
+import { useAuth } from "@/hooks/useAuth";
+import { useMyMembership, useMembershipLevels } from "@/hooks/useMembership";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
