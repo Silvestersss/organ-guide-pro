@@ -117,6 +117,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
           ))}
         </div>
       </motion.div>
+
+      {/* Custom Links */}
+      <CustomLinksSection systemId={system.id} />
     </motion.div>
   );
 }
