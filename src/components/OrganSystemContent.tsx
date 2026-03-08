@@ -119,6 +119,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
         </div>
       </motion.div>
 
+      {/* Excel Download (logged-in only) */}
+      <ExcelDownloadSection systemId={system.id} />
+
       {/* Custom Links */}
       <CustomLinksSection systemId={system.id} />
     </motion.div>
