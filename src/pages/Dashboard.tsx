@@ -7,6 +7,7 @@ import { PasswordModal } from "@/components/PasswordModal";
 import { OrganSystemContent } from "@/components/OrganSystemContent";
 import { AuthButton } from "@/components/AuthButton";
 import { SystemNote } from "@/components/SystemNote";
+import { MembershipApply } from "@/components/MembershipApply";
 import { useAuth } from "@/hooks/useAuth";
 import { organSystems } from "@/data/organSystems";
 
