@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Video, Play, Plus, Pencil, Trash2, Check, X, Lock, Crown } from "lucide-react";
+import { Video, Play, Plus, Pencil, Trash2, Check, X, Lock, Crown, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -84,7 +84,24 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
     }
   };
 
-  const renderVideoItem = (video: typeof videos[0]) => {
+  const handleMoveVideo = async (videoId: string, direction: 'up' | 'down') => {
+    const sortedVideos = [...videos].sort((a, b) => a.sort_order - b.sort_order);
+    const idx = sortedVideos.findIndex((v) => v.id === videoId);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sortedVideos.length) return;
+
+    const current = sortedVideos[idx];
+    const swap = sortedVideos[swapIdx];
+    try {
+      await updateVideo.mutateAsync({ id: current.id, sort_order: swap.sort_order });
+      await updateVideo.mutateAsync({ id: swap.id, sort_order: current.sort_order });
+      toast.success("已調整排序");
+    } catch {
+      toast.error("排序調整失敗");
+    }
+  };
+
+  const renderVideoItem = (video: typeof videos[0], index: number, list: typeof videos) => {
     if (editingId === video.id && canEdit) {
       return (
         <li key={video.id} className="rounded-lg border border-border p-3 space-y-2">
@@ -105,6 +122,24 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
     return (
       <li key={video.id}>
         <div className="flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted/50">
+          {canEdit && (
+            <div className="flex flex-col shrink-0">
+              <button
+                onClick={() => handleMoveVideo(video.id, 'up')}
+                disabled={index === 0}
+                className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <ChevronUp className="h-3.5 w-3.5" />
+              </button>
+              <button
+                onClick={() => handleMoveVideo(video.id, 'down')}
+                disabled={index === list.length - 1}
+                className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
           <Play className="h-4 w-4 shrink-0 text-primary" />
           {video.url ? (
             <a href={video.url} target="_blank" rel="noopener noreferrer" className="flex-1 text-sm text-foreground hover:text-primary transition-colors">
@@ -175,7 +210,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       {freeVideos.length > 0 && (
         <div className="mb-4">
           <p className="text-xs text-muted-foreground mb-2 font-medium">免費影片</p>
-          <ul className="space-y-2">{freeVideos.map(renderVideoItem)}</ul>
+          <ul className="space-y-2">{freeVideos.map((v, i) => renderVideoItem(v, i, freeVideos))}</ul>
         </div>
       )}
 
@@ -186,7 +221,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
             <Crown className="h-3.5 w-3.5" /> 付費影片
           </p>
           {canViewPaid ? (
-            <ul className="space-y-2">{paidVideos.map(renderVideoItem)}</ul>
+            <ul className="space-y-2">{paidVideos.map((v, i) => renderVideoItem(v, i, paidVideos))}</ul>
           ) : (
             <div className="rounded-lg border border-dashed border-border p-6 text-center">
               <Lock className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
