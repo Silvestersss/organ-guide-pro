@@ -13,7 +13,7 @@ import { organSystems } from "@/data/organSystems";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
   const [activeSystem, setActiveSystem] = useState<string | null>(null);
   const [unlockedSystems, setUnlockedSystems] = useState<Set<string>>(new Set());
   const [passwordModal, setPasswordModal] = useState<string | null>(null);
