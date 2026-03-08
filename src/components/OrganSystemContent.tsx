@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
+import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
@@ -117,6 +118,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
           ))}
         </div>
       </motion.div>
+
+      {/* Excel Download (logged-in only) */}
+      <ExcelDownloadSection systemId={system.id} />
 
       {/* Custom Links */}
       <CustomLinksSection systemId={system.id} />
