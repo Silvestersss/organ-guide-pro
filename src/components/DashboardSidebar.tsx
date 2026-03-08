@@ -44,6 +44,27 @@ export function DashboardSidebar({ activeSystem, unlockedSystems, onSelectSystem
               </p>
             </div>
           </div>
+          {!isAdmin && tier !== "premium" && (
+            <button
+              onClick={() => {
+                // Scroll to MembershipApply section on welcome page
+                const el = document.getElementById("membership-apply");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth" });
+                } else {
+                  // If not on welcome page, navigate there
+                  onSelectSystem("");
+                  setTimeout(() => {
+                    document.getElementById("membership-apply")?.scrollIntoView({ behavior: "smooth" });
+                  }, 300);
+                }
+              }}
+              className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary/20"
+            >
+              <ArrowUpCircle className="h-3.5 w-3.5" />
+              {tier === "basic" ? "升級為付費會員" : "升級為尊貴會員"}
+            </button>
+          )}
         </div>
       )}
 
