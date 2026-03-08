@@ -1,45 +1,21 @@
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Crown, Check, Clock, XCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Crown, Check } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useMembershipLevels, useMyMembership, useApplyMembership } from "@/hooks/useMembership";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { organSystems } from "@/data/organSystems";
+import { useMyMembership, useEnsureBasicMembership, TIER_LABELS, TIER_DESCRIPTIONS, type MemberTier } from "@/hooks/useMembership";
+
+const TIERS: MemberTier[] = ["basic", "paid", "premium"];
 
 export function MembershipApply() {
   const { user } = useAuth();
   const email = user?.email;
-  const { data: levels = [] } = useMembershipLevels();
-  const { data: approvedMembership } = useMyMembership(email);
-  const apply = useApplyMembership();
+  const { data: membership } = useMyMembership(email);
 
-  // Also fetch pending/rejected
-  const { data: allMyMemberships = [] } = useQuery({
-    queryKey: ["my_all_memberships", email],
-    enabled: !!email,
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("user_memberships")
-        .select("*")
-        .eq("user_email", email!);
-      if (error) throw error;
-      return data;
-    },
-  });
+  // Auto-assign basic membership
+  useEnsureBasicMembership(email);
 
-  if (!email || levels.length === 0) return null;
+  if (!email) return null;
 
-  const handleApply = async (levelId: string) => {
-    try {
-      await apply.mutateAsync({ user_email: email, level_id: levelId });
-      toast.success("申請已提交，請等待管理員審核");
-    } catch {
-      toast.error("申請失敗，可能已申請過此級別");
-    }
-  };
+  const currentTier = membership?.tier || "basic";
 
   return (
     <motion.div
@@ -52,68 +28,32 @@ export function MembershipApply() {
         <h2 className="font-display text-xl font-bold text-foreground">會員等級</h2>
       </div>
 
-      {approvedMembership ? (
-        <div className="rounded-lg bg-primary/5 border border-primary/20 p-4">
-          <div className="flex items-center gap-2">
-            <Check className="h-5 w-5 text-primary" />
-            <span className="font-medium text-foreground">
-              目前級別：{levels.find((l) => l.id === approvedMembership.level_id)?.name || "未知"}
-            </span>
-          </div>
-          <p className="mt-1 text-sm text-muted-foreground">
-            {levels.find((l) => l.id === approvedMembership.level_id)?.description}
-          </p>
-          <div className="mt-2 flex flex-wrap gap-1">
-            {(levels.find((l) => l.id === approvedMembership.level_id)?.allowed_systems || []).map((sysId) => {
-              const sys = organSystems.find((s) => s.id === sysId);
-              return sys ? (
-                <span key={sysId} className="rounded-full bg-primary/10 px-2 py-0.5 text-xs text-primary">{sys.name}</span>
-              ) : null;
-            })}
-          </div>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          <p className="text-sm text-muted-foreground">選擇一個會員級別提交申請，管理員審核後即可享受對應權限。</p>
-          {levels.map((level) => {
-            const existing = allMyMemberships.find((m) => m.level_id === level.id);
-            const isPending = existing?.status === "pending";
-            const isRejected = existing?.status === "rejected";
-
-            return (
-              <div key={level.id} className="rounded-lg border border-border p-4 flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <p className="font-medium text-foreground">{level.name}</p>
-                  {level.description && <p className="text-sm text-muted-foreground">{level.description}</p>}
-                  <div className="mt-1.5 flex flex-wrap gap-1">
-                    {level.allowed_systems.map((sysId) => {
-                      const sys = organSystems.find((s) => s.id === sysId);
-                      return sys ? (
-                        <span key={sysId} className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{sys.name}</span>
-                      ) : null;
-                    })}
-                  </div>
-                </div>
-                <div>
-                  {isPending ? (
-                    <span className="flex items-center gap-1 text-xs text-yellow-600">
-                      <Clock className="h-3.5 w-3.5" /> 審核中
-                    </span>
-                  ) : isRejected ? (
-                    <span className="flex items-center gap-1 text-xs text-red-500">
-                      <XCircle className="h-3.5 w-3.5" /> 已拒絕
-                    </span>
-                  ) : (
-                    <Button size="sm" variant="outline" onClick={() => handleApply(level.id)} disabled={apply.isPending}>
-                      申請
-                    </Button>
-                  )}
-                </div>
+      <div className="grid gap-3 md:grid-cols-3">
+        {TIERS.map((tier) => {
+          const isActive = currentTier === tier;
+          return (
+            <div
+              key={tier}
+              className={`rounded-lg border p-4 transition-all ${
+                isActive
+                  ? "border-primary bg-primary/5"
+                  : "border-border bg-card"
+              }`}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Crown className={`h-4 w-4 ${tier === "premium" ? "text-yellow-500" : tier === "paid" ? "text-primary" : "text-muted-foreground"}`} />
+                <span className="font-medium text-foreground">{TIER_LABELS[tier]}</span>
+                {isActive && <Check className="h-4 w-4 text-primary ml-auto" />}
               </div>
-            );
-          })}
-        </div>
-      )}
+              <p className="text-xs text-muted-foreground">{TIER_DESCRIPTIONS[tier]}</p>
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="mt-3 text-xs text-muted-foreground">
+        如需升級為付費會員或尊貴會員，請聯繫管理員。
+      </p>
     </motion.div>
   );
 }

@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, Heart, Lightbulb, Sparkles, Lock } from "lucide-react";
+import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
 import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
-import { useAuth } from "@/hooks/useAuth";
-import { useMyMembership, useMembershipLevels } from "@/hooks/useMembership";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
@@ -16,14 +14,6 @@ const fadeUp = {
 };
 
 export function OrganSystemContent({ system }: OrganSystemContentProps) {
-  const { user, isAdmin } = useAuth();
-  const { data: membership } = useMyMembership(user?.email);
-  const { data: levels = [] } = useMembershipLevels();
-
-  // Check if user has access to this system's videos
-  const myLevel = membership ? levels.find((l) => l.id === membership.level_id) : null;
-  const hasVideoAccess = isAdmin || (myLevel?.allowed_systems?.includes(system.id) ?? false);
-
   return (
     <motion.div
       initial="initial"
@@ -32,11 +22,7 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
     >
       {/* Hero Section */}
       <motion.div variants={fadeUp} transition={{ delay: 0 }} className="relative overflow-hidden rounded-xl">
-        <img
-          src={system.image}
-          alt={system.name}
-          className="h-64 w-full object-cover"
-        />
+        <img src={system.image} alt={system.name} className="h-64 w-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         <div className="absolute bottom-0 left-0 p-6">
           <h1 className="font-display text-3xl font-bold">{system.name}</h1>
@@ -60,12 +46,7 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
         <p className="leading-relaxed text-secondary-foreground">{system.description}</p>
         <div className="mt-4 flex flex-wrap gap-2">
           {system.organs.map((organ) => (
-            <span
-              key={organ}
-              className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm text-primary"
-            >
-              {organ}
-            </span>
+            <span key={organ} className="rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm text-primary">{organ}</span>
           ))}
         </div>
       </motion.div>
@@ -104,9 +85,7 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
         <ul className="space-y-3">
           {system.details.healthTips.map((tip, i) => (
             <li key={i} className="flex items-start gap-3">
-              <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-medical-green/10 text-xs font-bold text-medical-green">
-                {i + 1}
-              </span>
+              <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-medical-green/10 text-xs font-bold text-medical-green">{i + 1}</span>
               <span className="text-secondary-foreground">{tip}</span>
             </li>
           ))}
@@ -129,16 +108,8 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
         </div>
       </motion.div>
 
-
-      {/* Excel Download (membership-gated) */}
-      {hasVideoAccess ? (
-        <ExcelDownloadSection systemId={system.id} />
-      ) : user ? (
-        <motion.div variants={fadeUp} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card p-6 text-center">
-          <Lock className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
-          <p className="text-sm text-muted-foreground">此系統的知識影片需要對應會員級別才能查看</p>
-        </motion.div>
-      ) : null}
+      {/* Videos (tier-based access) */}
+      <ExcelDownloadSection systemId={system.id} />
 
       {/* Custom Links */}
       <CustomLinksSection systemId={system.id} />
