@@ -6,6 +6,7 @@ import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { PasswordModal } from "@/components/PasswordModal";
 import { OrganSystemContent } from "@/components/OrganSystemContent";
 import { AuthButton } from "@/components/AuthButton";
+import { SystemNote } from "@/components/SystemNote";
 import { useAuth } from "@/hooks/useAuth";
 import { organSystems } from "@/data/organSystems";
 
@@ -103,6 +104,13 @@ export default function Dashboard() {
             <AuthButton />
           </div>
         </header>
+
+        {/* System note */}
+        {currentSystem && (
+          <div className="border-b border-border bg-background/50 px-4 py-3 lg:px-6">
+            <SystemNote systemId={currentSystem.id} />
+          </div>
+        )}
 
         <div className="p-4 lg:p-8">
           {currentSystem ? (
