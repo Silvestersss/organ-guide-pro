@@ -13,6 +13,7 @@ import { MembershipAdmin } from "@/components/MembershipAdmin";
 export default function Admin() {
   const navigate = useNavigate();
   const { isAdmin, loading } = useAuth();
+  const [adminSection, setAdminSection] = useState<"links" | "membership">("links");
   const [activeTab, setActiveTab] = useState(organSystems[0].id);
   const { data: links = [], isLoading } = useCustomLinks(activeTab);
   const addLink = useAddLink();
