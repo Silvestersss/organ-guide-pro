@@ -98,7 +98,31 @@ export default function Admin() {
       </header>
 
       <div className="container mx-auto max-w-4xl p-4 lg:p-8">
-        {/* Tabs */}
+        {/* Admin Section Tabs */}
+        <div className="mb-6 flex gap-2 border-b border-border pb-4">
+          <button
+            onClick={() => setAdminSection("links")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
+              adminSection === "links" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Link2 className="h-4 w-4" /> 延伸資源
+          </button>
+          <button
+            onClick={() => setAdminSection("membership")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
+              adminSection === "membership" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Crown className="h-4 w-4" /> 會員管理
+          </button>
+        </div>
+
+        {adminSection === "membership" ? (
+          <MembershipAdmin />
+        ) : (
+        <>
+        {/* System Tabs */}
         <div className="mb-6 flex flex-wrap gap-2">
           {organSystems.map((sys) => (
             <button
