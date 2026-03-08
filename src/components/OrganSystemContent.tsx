@@ -16,6 +16,14 @@ const fadeUp = {
 };
 
 export function OrganSystemContent({ system }: OrganSystemContentProps) {
+  const { user, isAdmin } = useAuth();
+  const { data: membership } = useMyMembership(user?.email);
+  const { data: levels = [] } = useMembershipLevels();
+
+  // Check if user has access to this system's videos
+  const myLevel = membership ? levels.find((l) => l.id === membership.level_id) : null;
+  const hasVideoAccess = isAdmin || (myLevel?.allowed_systems?.includes(system.id) ?? false);
+
   return (
     <motion.div
       initial="initial"
