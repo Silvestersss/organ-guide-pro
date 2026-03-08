@@ -47,6 +47,27 @@ export type Database = {
         }
         Relationships: []
       }
+      system_notes: {
+        Row: {
+          id: string
+          note: string
+          system_id: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          note?: string
+          system_id: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          note?: string
+          system_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
