@@ -19,13 +19,9 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSelectSystem = useCallback((id: string) => {
-    if (unlockedSystems.has(id)) {
-      setActiveSystem(id);
-      setSidebarOpen(false);
-    } else {
-      setPasswordModal(id);
-    }
-  }, [unlockedSystems]);
+    setActiveSystem(id);
+    setSidebarOpen(false);
+  }, []);
 
   const handlePasswordSubmit = useCallback((password: string) => {
     const system = organSystems.find((s) => s.id === passwordModal);
