@@ -47,6 +47,33 @@ export type Database = {
         }
         Relationships: []
       }
+      membership_levels: {
+        Row: {
+          allowed_systems: string[]
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          sort_order: number
+        }
+        Insert: {
+          allowed_systems?: string[]
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+        }
+        Update: {
+          allowed_systems?: string[]
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       system_notes: {
         Row: {
           id: string
@@ -67,6 +94,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      user_memberships: {
+        Row: {
+          created_at: string
+          id: string
+          level_id: string
+          status: string
+          updated_at: string
+          user_email: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_id: string
+          status?: string
+          updated_at?: string
+          user_email: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_id?: string
+          status?: string
+          updated_at?: string
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_memberships_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "membership_levels"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
