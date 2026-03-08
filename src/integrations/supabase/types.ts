@@ -99,24 +99,27 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          level_id: string
+          level_id: string | null
           status: string
+          tier: string
           updated_at: string
           user_email: string
         }
         Insert: {
           created_at?: string
           id?: string
-          level_id: string
+          level_id?: string | null
           status?: string
+          tier?: string
           updated_at?: string
           user_email: string
         }
         Update: {
           created_at?: string
           id?: string
-          level_id?: string
+          level_id?: string | null
           status?: string
+          tier?: string
           updated_at?: string
           user_email?: string
         }
@@ -129,6 +132,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      videos: {
+        Row: {
+          created_at: string
+          id: string
+          is_free: boolean
+          sort_order: number
+          system_id: string
+          title: string
+          updated_at: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_free?: boolean
+          sort_order?: number
+          system_id: string
+          title: string
+          updated_at?: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_free?: boolean
+          sort_order?: number
+          system_id?: string
+          title?: string
+          updated_at?: string
+          url?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {
