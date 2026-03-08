@@ -1,14 +1,17 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Activity, Stethoscope, BookOpen, Shield } from "lucide-react";
+import { Menu, X, Activity, Stethoscope, BookOpen, Shield, Settings } from "lucide-react";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { PasswordModal } from "@/components/PasswordModal";
 import { OrganSystemContent } from "@/components/OrganSystemContent";
+import { AuthButton } from "@/components/AuthButton";
+import { useAuth } from "@/hooks/useAuth";
 import { organSystems } from "@/data/organSystems";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { isAdmin } = useAuth();
   const [activeSystem, setActiveSystem] = useState<string | null>(null);
   const [unlockedSystems, setUnlockedSystems] = useState<Set<string>>(new Set());
   const [passwordModal, setPasswordModal] = useState<string | null>(null);
@@ -79,13 +82,25 @@ export default function Dashboard() {
           >
             {sidebarOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
-          <div>
+          <div className="flex-1">
             <h1 className="font-display text-lg font-bold">
               {currentSystem ? currentSystem.name : "歡迎回來！🎉"}
             </h1>
             <p className="text-xs text-muted-foreground">
               {currentSystem ? currentSystem.nameEn : "選擇一個器官系統開始探索"}
             </p>
+          </div>
+          <div className="flex items-center gap-2">
+            {isAdmin && (
+              <button
+                onClick={() => navigate("/admin")}
+                className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                title="內容管理"
+              >
+                <Settings className="h-5 w-5" />
+              </button>
+            )}
+            <AuthButton />
           </div>
         </header>
 

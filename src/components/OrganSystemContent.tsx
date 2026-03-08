@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
+import { CustomLinksSection } from "@/components/CustomLinksSection";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
@@ -116,6 +117,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
           ))}
         </div>
       </motion.div>
+
+      {/* Custom Links */}
+      <CustomLinksSection systemId={system.id} />
     </motion.div>
   );
 }
