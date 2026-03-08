@@ -146,7 +146,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Video className="h-5 w-5 text-primary" />
-          <h2 className="font-display text-xl font-bold text-foreground">知識影片</h2>
+          <h2 className="font-display text-xl font-bold text-foreground">有關影片</h2>
         </div>
         {canEdit && (
           <Button size="sm" variant="outline" onClick={() => setShowAdd(!showAdd)} className="gap-1">
