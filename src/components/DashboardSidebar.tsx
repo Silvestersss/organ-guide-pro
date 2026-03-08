@@ -1,5 +1,7 @@
-import { Wind, Heart, Apple, Brain, Droplets, Lock, Check, Instagram, LogOut } from "lucide-react";
+import { Wind, Heart, Apple, Brain, Droplets, Lock, Check, Instagram, LogOut, User, Crown, Star } from "lucide-react";
 import { organSystems } from "@/data/organSystems";
+import { useAuth } from "@/hooks/useAuth";
+import { useMyMembership, TIER_LABELS, type MemberTier } from "@/hooks/useMembership";
 
 const iconMap: Record<string, React.ElementType> = {
   Wind, Heart, Apple, Brain, Droplets,
@@ -13,6 +15,13 @@ interface DashboardSidebarProps {
 }
 
 export function DashboardSidebar({ activeSystem, unlockedSystems, onSelectSystem, onLogout }: DashboardSidebarProps) {
+  const { user, isAdmin } = useAuth();
+  const { data: membership } = useMyMembership(user?.email);
+  const tier: MemberTier = isAdmin ? "premium" : (membership?.tier || "basic");
+
+  const tierIcon = tier === "premium" ? Crown : tier === "paid" ? Star : User;
+  const TierIcon = tierIcon;
+
   return (
     <aside className="flex h-full w-72 flex-col border-r border-border bg-gradient-sidebar">
       {/* Header */}
@@ -20,6 +29,23 @@ export function DashboardSidebar({ activeSystem, unlockedSystems, onSelectSystem
         <h2 className="font-display text-lg font-bold text-gradient-teal">IU 健康百科</h2>
         <p className="mt-1 text-xs text-muted-foreground">人體器官系統探索</p>
       </div>
+
+      {/* User info */}
+      {user && (
+        <div className="border-b border-border px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
+              <TierIcon className="h-4 w-4 text-primary" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-sm font-medium text-foreground">{user.email}</p>
+              <p className="text-xs text-muted-foreground">
+                {isAdmin ? "管理員" : TIER_LABELS[tier]}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Nav */}
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
