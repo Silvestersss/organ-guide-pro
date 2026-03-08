@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, Heart, Lightbulb, Sparkles } from "lucide-react";
+import { AlertTriangle, Heart, Lightbulb, Sparkles, Lock } from "lucide-react";
 import type { OrganSystem } from "@/data/organSystems";
 import { CustomLinksSection } from "@/components/CustomLinksSection";
 import { ExcelDownloadSection } from "@/components/ExcelDownloadSection";
-
+import { useAuth } from "@/hooks/useAuth";
+import { useMyMembership, useMembershipLevels } from "@/hooks/useMembership";
 
 interface OrganSystemContentProps {
   system: OrganSystem;
@@ -15,6 +16,14 @@ const fadeUp = {
 };
 
 export function OrganSystemContent({ system }: OrganSystemContentProps) {
+  const { user, isAdmin } = useAuth();
+  const { data: membership } = useMyMembership(user?.email);
+  const { data: levels = [] } = useMembershipLevels();
+
+  // Check if user has access to this system's videos
+  const myLevel = membership ? levels.find((l) => l.id === membership.level_id) : null;
+  const hasVideoAccess = isAdmin || (myLevel?.allowed_systems?.includes(system.id) ?? false);
+
   return (
     <motion.div
       initial="initial"
@@ -121,8 +130,15 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
       </motion.div>
 
 
-      {/* Excel Download (logged-in only) */}
-      <ExcelDownloadSection systemId={system.id} />
+      {/* Excel Download (membership-gated) */}
+      {hasVideoAccess ? (
+        <ExcelDownloadSection systemId={system.id} />
+      ) : user ? (
+        <motion.div variants={fadeUp} transition={{ delay: 0.4 }} className="rounded-xl border border-border bg-card p-6 text-center">
+          <Lock className="mx-auto h-8 w-8 text-muted-foreground mb-2" />
+          <p className="text-sm text-muted-foreground">此系統的知識影片需要對應會員級別才能查看</p>
+        </motion.div>
+      ) : null}
 
       {/* Custom Links */}
       <CustomLinksSection systemId={system.id} />

@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Plus, Trash2, Pencil, Check, X, ExternalLink, GripVertical } from "lucide-react";
+import { ArrowLeft, Plus, Trash2, Pencil, Check, X, ExternalLink, GripVertical, Crown, Link2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useCustomLinks, useAddLink, useUpdateLink, useDeleteLink } from "@/hooks/useCustomLinks";
 import { organSystems } from "@/data/organSystems";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { MembershipAdmin } from "@/components/MembershipAdmin";
 
 export default function Admin() {
   const navigate = useNavigate();
   const { isAdmin, loading } = useAuth();
+  const [adminSection, setAdminSection] = useState<"links" | "membership">("links");
   const [activeTab, setActiveTab] = useState(organSystems[0].id);
   const { data: links = [], isLoading } = useCustomLinks(activeTab);
   const addLink = useAddLink();
@@ -96,7 +98,31 @@ export default function Admin() {
       </header>
 
       <div className="container mx-auto max-w-4xl p-4 lg:p-8">
-        {/* Tabs */}
+        {/* Admin Section Tabs */}
+        <div className="mb-6 flex gap-2 border-b border-border pb-4">
+          <button
+            onClick={() => setAdminSection("links")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
+              adminSection === "links" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Link2 className="h-4 w-4" /> 延伸資源
+          </button>
+          <button
+            onClick={() => setAdminSection("membership")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-all flex items-center gap-1.5 ${
+              adminSection === "membership" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            <Crown className="h-4 w-4" /> 會員管理
+          </button>
+        </div>
+
+        {adminSection === "membership" ? (
+          <MembershipAdmin />
+        ) : (
+        <>
+        {/* System Tabs */}
         <div className="mb-6 flex flex-wrap gap-2">
           {organSystems.map((sys) => (
             <button
@@ -196,6 +222,8 @@ export default function Admin() {
               </motion.div>
             ))}
           </div>
+        )}
+        </>
         )}
       </div>
     </div>

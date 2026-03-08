@@ -7,12 +7,13 @@ import { PasswordModal } from "@/components/PasswordModal";
 import { OrganSystemContent } from "@/components/OrganSystemContent";
 import { AuthButton } from "@/components/AuthButton";
 import { SystemNote } from "@/components/SystemNote";
+import { MembershipApply } from "@/components/MembershipApply";
 import { useAuth } from "@/hooks/useAuth";
 import { organSystems } from "@/data/organSystems";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user } = useAuth();
   const [activeSystem, setActiveSystem] = useState<string | null>(null);
   const [unlockedSystems, setUnlockedSystems] = useState<Set<string>>(new Set());
   const [passwordModal, setPasswordModal] = useState<string | null>(null);
@@ -112,7 +113,10 @@ export default function Dashboard() {
           {currentSystem ? (
             <OrganSystemContent key={currentSystem.id} system={currentSystem} />
           ) : (
-            <WelcomeContent unlockedCount={unlockedSystems.size} onSelectSystem={handleSelectSystem} />
+            <>
+              <WelcomeContent unlockedCount={unlockedSystems.size} onSelectSystem={handleSelectSystem} />
+              {user && <div className="mt-8"><MembershipApply /></div>}
+            </>
           )}
         </div>
       </main>
