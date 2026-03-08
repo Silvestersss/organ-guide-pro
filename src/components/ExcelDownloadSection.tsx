@@ -4,12 +4,12 @@ import { useAuth } from "@/hooks/useAuth";
 
 const SPREADSHEET_ID = "1WSzVYnLnq3VCXAUvFxYUlNAT2YOxHAqkpt_L-pQP0F8";
 
-const SYSTEM_SHEETS: Record<string, { gid: string; label: string }> = {
-  respiratory: { gid: "0", label: "呼吸系統" },
-  circulatory: { gid: "1352104618", label: "循環系統" },
-  digestive: { gid: "286972187", label: "消化系統" },
-  nervous: { gid: "1148795897", label: "神經系統" },
-  urinary: { gid: "1049521290", label: "排泄與泌尿系統" },
+const SYSTEM_FOLDERS: Record<string, { url: string; label: string }> = {
+  respiratory: { url: "https://drive.google.com/drive/folders/18VjBffBCLCeB23dAoS1l3lDBYgG2CoCe", label: "呼吸系統" },
+  circulatory: { url: "https://drive.google.com/drive/folders/1wE5wp8Y8IKiYyZjxIb9RHLTxTEvzECZj", label: "循環系統" },
+  digestive: { url: "https://drive.google.com/drive/folders/1CeKHYcTjdSrfphAThOwG7HoTqCBH1eT0", label: "消化系統" },
+  nervous: { url: "https://drive.google.com/drive/folders/1hn7QMZWCMlCfk8k1MbcnG0j4flrnqOT0", label: "神經系統" },
+  urinary: { url: "https://drive.google.com/drive/folders/1KBrXy-dKE7WKsGbu8oEjF8gJvHd7MNhN", label: "排泄與泌尿系統" },
 };
 
 function getViewUrl(gid: string) {
