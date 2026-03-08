@@ -1,10 +1,12 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Menu, X, Activity, Stethoscope, BookOpen, Shield } from "lucide-react";
+import { Menu, X, Activity, Stethoscope, BookOpen, Shield, Settings } from "lucide-react";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { PasswordModal } from "@/components/PasswordModal";
 import { OrganSystemContent } from "@/components/OrganSystemContent";
+import { AuthButton } from "@/components/AuthButton";
+import { useAuth } from "@/hooks/useAuth";
 import { organSystems } from "@/data/organSystems";
 
 export default function Dashboard() {
