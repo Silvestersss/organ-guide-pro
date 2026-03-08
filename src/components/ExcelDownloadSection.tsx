@@ -2,19 +2,13 @@ import { motion } from "framer-motion";
 import { Video, ExternalLink } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
-const SPREADSHEET_ID = "1WSzVYnLnq3VCXAUvFxYUlNAT2YOxHAqkpt_L-pQP0F8";
-
-const SYSTEM_SHEETS: Record<string, { gid: string; label: string }> = {
-  respiratory: { gid: "0", label: "呼吸系統" },
-  circulatory: { gid: "1352104618", label: "循環系統" },
-  digestive: { gid: "286972187", label: "消化系統" },
-  nervous: { gid: "1148795897", label: "神經系統" },
-  urinary: { gid: "1049521290", label: "排泄與泌尿系統" },
+const SYSTEM_FOLDERS: Record<string, { url: string; label: string }> = {
+  respiratory: { url: "https://drive.google.com/drive/folders/18VjBffBCLCeB23dAoS1l3lDBYgG2CoCe", label: "呼吸系統" },
+  circulatory: { url: "https://drive.google.com/drive/folders/1wE5wp8Y8IKiYyZjxIb9RHLTxTEvzECZj", label: "循環系統" },
+  digestive: { url: "https://drive.google.com/drive/folders/1CeKHYcTjdSrfphAThOwG7HoTqCBH1eT0", label: "消化系統" },
+  nervous: { url: "https://drive.google.com/drive/folders/1hn7QMZWCMlCfk8k1MbcnG0j4flrnqOT0", label: "神經系統" },
+  urinary: { url: "https://drive.google.com/drive/folders/1KBrXy-dKE7WKsGbu8oEjF8gJvHd7MNhN", label: "排泄與泌尿系統" },
 };
-
-function getViewUrl(gid: string) {
-  return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?gid=${gid}#gid=${gid}`;
-}
 
 interface ExcelDownloadSectionProps {
   systemId: string;
@@ -22,9 +16,9 @@ interface ExcelDownloadSectionProps {
 
 export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
   const { user } = useAuth();
-  const sheet = SYSTEM_SHEETS[systemId];
+  const folder = SYSTEM_FOLDERS[systemId];
 
-  if (!user || !sheet) return null;
+  if (!user || !folder) return null;
 
   return (
     <motion.div
@@ -39,7 +33,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
           <h2 className="font-display text-xl font-bold">知識影片</h2>
         </div>
         <a
-          href={getViewUrl(sheet.gid)}
+          href={folder.url}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
