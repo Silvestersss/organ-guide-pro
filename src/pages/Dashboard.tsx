@@ -105,6 +105,13 @@ export default function Dashboard() {
           </div>
         </header>
 
+        {/* System note */}
+        {currentSystem && (
+          <div className="border-b border-border bg-background/50 px-4 py-3 lg:px-6">
+            <SystemNote systemId={currentSystem.id} />
+          </div>
+        )}
+
         <div className="p-4 lg:p-8">
           {currentSystem ? (
             <OrganSystemContent key={currentSystem.id} system={currentSystem} />
