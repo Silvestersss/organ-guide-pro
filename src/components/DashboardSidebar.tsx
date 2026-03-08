@@ -1,4 +1,4 @@
-import { Wind, Heart, Apple, Brain, Droplets, Lock, Check, Instagram, LogOut, User, Crown, Star } from "lucide-react";
+import { Wind, Heart, Apple, Brain, Droplets, Lock, Check, Instagram, LogOut, User, Crown, Star, ArrowUpCircle } from "lucide-react";
 import { organSystems } from "@/data/organSystems";
 import { useAuth } from "@/hooks/useAuth";
 import { useMyMembership, TIER_LABELS, type MemberTier } from "@/hooks/useMembership";
