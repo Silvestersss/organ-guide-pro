@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Download, FileSpreadsheet } from "lucide-react";
+import { FileSpreadsheet, ExternalLink } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,10 +20,6 @@ const SYSTEM_SHEETS: Record<string, { gid: string; label: string }> = {
   nervous: { gid: "1148795897", label: "神經系統 學習資料" },
   urinary: { gid: "1049521290", label: "排泄與泌尿系統 學習資料" },
 };
-
-function getExportUrl(gid: string) {
-  return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=xlsx&gid=${gid}`;
-}
 
 function getViewUrl(gid: string) {
   return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?gid=${gid}#gid=${gid}`;
@@ -48,7 +44,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
     >
       <div className="mb-4 flex items-center gap-2">
         <FileSpreadsheet className="h-5 w-5 text-medical-green" />
-        <h2 className="font-display text-xl font-bold">學習資料下載</h2>
+        <h2 className="font-display text-xl font-bold">學習資料</h2>
       </div>
 
       <Table>
@@ -62,27 +58,12 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
           <TableRow>
             <TableCell className="font-medium">{sheet.label}</TableCell>
             <TableCell className="text-right">
-              <div className="flex items-center justify-end gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  asChild
-                >
-                  <a href={getViewUrl(sheet.gid)} target="_blank" rel="noopener noreferrer">
-                    <FileSpreadsheet className="h-4 w-4" />
-                    線上檢視
-                  </a>
-                </Button>
-                <Button
-                  size="sm"
-                  asChild
-                >
-                  <a href={getExportUrl(sheet.gid)} target="_blank" rel="noopener noreferrer">
-                    <Download className="h-4 w-4" />
-                    下載 Excel
-                  </a>
-                </Button>
-              </div>
+              <Button variant="outline" size="sm" asChild>
+                <a href={getViewUrl(sheet.gid)} target="_blank" rel="noopener noreferrer">
+                  <ExternalLink className="h-4 w-4" />
+                  線上檢視
+                </a>
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>
