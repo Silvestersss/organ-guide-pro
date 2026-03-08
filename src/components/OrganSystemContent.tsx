@@ -120,6 +120,9 @@ export function OrganSystemContent({ system }: OrganSystemContentProps) {
         </div>
       </motion.div>
 
+      {/* Video Table (logged-in only) */}
+      <VideoTableSection systemId={system.id} />
+
       {/* Excel Download (logged-in only) */}
       <ExcelDownloadSection systemId={system.id} />
 
