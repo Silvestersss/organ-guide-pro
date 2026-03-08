@@ -115,7 +115,7 @@ export default function Dashboard() {
           ) : (
             <>
               <WelcomeContent unlockedCount={unlockedSystems.size} onSelectSystem={handleSelectSystem} />
-              {user && <div className="mt-8"><MembershipApply /></div>}
+              {user && <div id="membership-apply" className="mt-8"><MembershipApply /></div>}
             </>
           )}
         </div>
