@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LogIn, LogOut, Pencil, PencilOff } from "lucide-react";
+import { LogIn, LogOut, Pencil, PencilOff, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
