@@ -53,11 +53,10 @@ interface ExcelDownloadSectionProps {
 }
 
 export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
-  const { user } = useAuth();
   const system = SYSTEM_VIDEOS[systemId];
   const folderUrl = FOLDER_URLS[systemId];
 
-  if (!user || !system) return null;
+  if (!system) return null;
 
   return (
     <motion.div
