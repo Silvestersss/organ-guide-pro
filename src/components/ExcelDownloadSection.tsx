@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Video, Play, Plus, Pencil, Trash2, Check, X, Lock, Crown } from "lucide-react";
+import { Video, Play, Plus, Pencil, Trash2, Check, X, Lock, Crown, ChevronUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
