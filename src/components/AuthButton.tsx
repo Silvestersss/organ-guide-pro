@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { LogIn, LogOut, Pencil, PencilOff, Eye, EyeOff } from "lucide-react";
+import { LogIn, LogOut, Pencil, PencilOff, Eye, EyeOff, Mail } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { lovable } from "@/integrations/lovable/index";
 import { Button } from "@/components/ui/button";
+import { EmailAuthDialog } from "@/components/EmailAuthDialog";
 import { toast } from "sonner";
 
 export function AuthButton() {
   const { user, isAdmin, isEditMode, setEditMode, isPreviewingAsMember, setPreviewingAsMember, signOut, loading } = useAuth();
   const [signingIn, setSigningIn] = useState(false);
+  const [emailDialogOpen, setEmailDialogOpen] = useState(false);
 
   const handleGoogleLogin = async () => {
     setSigningIn(true);
@@ -36,20 +38,34 @@ export function AuthButton() {
 
   if (!user) {
     return (
-      <Button
-        size="sm"
-        variant="outline"
-        onClick={handleGoogleLogin}
-        disabled={signingIn}
-        className="gap-2"
-      >
-        <LogIn className="h-4 w-4" />
-        {signingIn ? "登入中..." : "Google 登入"}
-      </Button>
+      <>
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleGoogleLogin}
+            disabled={signingIn}
+            className="gap-2"
+          >
+            <LogIn className="h-4 w-4" />
+            {signingIn ? "登入中..." : "Google 登入"}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setEmailDialogOpen(true)}
+            className="gap-2"
+          >
+            <Mail className="h-4 w-4" />
+            Email 登入
+          </Button>
+        </div>
+        <EmailAuthDialog open={emailDialogOpen} onOpenChange={setEmailDialogOpen} />
+      </>
     );
   }
 
-  const ADMIN_EMAILS = ["leezhixing117@gmail.com", "amypy117@gmail.com"];
+  const ADMIN_EMAILS = ["leezhixing117@gmail.com", "amypy117@gmail.com", "worksmartstyle@gmail.com"];
   const isRealAdmin = !!user?.email && ADMIN_EMAILS.includes(user.email);
 
   return (
