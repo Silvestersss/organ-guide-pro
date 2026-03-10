@@ -120,24 +120,12 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       );
     }
 
-    const handlePlayVideo = (url: string) => {
-      // Convert Google Drive links to embedded preview format
+    const getEmbedUrl = (url: string): string => {
       const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (driveMatch) {
-        const embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
-        const win = window.open('', '_blank', 'noopener,noreferrer');
-        if (win) {
-          win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}iframe{width:100vw;height:100vh}</style></head><body><iframe src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe></body></html>`);
-          win.document.close();
-        }
-        return;
+        return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
       }
-      // For other URLs, open in a protected wrapper
-      const win = window.open('', '_blank', 'noopener,noreferrer');
-      if (win) {
-        win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}video{width:100vw;height:100vh}</style></head><body><video src="${url}" controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false"></video></body></html>`);
-        win.document.close();
-      }
+      return url;
     };
 
     return (
