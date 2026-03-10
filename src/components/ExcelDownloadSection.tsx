@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Video, Play, Plus, Pencil, Trash2, Check, X, Lock, Crown, ChevronUp, ChevronDown } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -39,8 +40,8 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
   const [editTitle, setEditTitle] = useState("");
   const [editUrl, setEditUrl] = useState("");
   const [editIsFree, setEditIsFree] = useState(true);
-
-  if (!user) return null;
+  const [playerUrl, setPlayerUrl] = useState<string | null>(null);
+  const [playerTitle, setPlayerTitle] = useState("");
 
   const freeVideos = videos.filter((v) => v.is_free);
   const paidVideos = videos.filter((v) => !v.is_free);
@@ -119,24 +120,12 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       );
     }
 
-    const handlePlayVideo = (url: string) => {
-      // Convert Google Drive links to embedded preview format
+    const getEmbedUrl = (url: string): string => {
       const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
       if (driveMatch) {
-        const embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
-        const win = window.open('', '_blank', 'noopener,noreferrer');
-        if (win) {
-          win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}iframe{width:100vw;height:100vh}</style></head><body><iframe src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe></body></html>`);
-          win.document.close();
-        }
-        return;
+        return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
       }
-      // For other URLs, open in a protected wrapper
-      const win = window.open('', '_blank', 'noopener,noreferrer');
-      if (win) {
-        win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}video{width:100vw;height:100vh}</style></head><body><video src="${url}" controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false"></video></body></html>`);
-        win.document.close();
-      }
+      return url;
     };
 
     return (
@@ -163,7 +152,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
           <Play className="h-4 w-4 shrink-0 text-primary" />
           {video.url ? (
             <button
-              onClick={() => handlePlayVideo(video.url!)}
+              onClick={() => { setPlayerUrl(getEmbedUrl(video.url!)); setPlayerTitle(video.title); }}
               className="flex-1 text-left text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               {video.title}
@@ -257,6 +246,24 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       {videos.length === 0 && !showAdd && (
         <p className="text-sm text-muted-foreground">尚未新增影片</p>
       )}
+
+      {/* Video Player Dialog */}
+      <Dialog open={!!playerUrl} onOpenChange={(open) => { if (!open) setPlayerUrl(null); }}>
+        <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-black border-none" onContextMenu={(e) => e.preventDefault()}>
+          <DialogTitle className="sr-only">{playerTitle}</DialogTitle>
+          {playerUrl && (
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                src={playerUrl}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
