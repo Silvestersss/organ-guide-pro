@@ -119,6 +119,26 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       );
     }
 
+    const handlePlayVideo = (url: string) => {
+      // Convert Google Drive links to embedded preview format
+      const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch) {
+        const embedUrl = `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+        const win = window.open('', '_blank', 'noopener,noreferrer');
+        if (win) {
+          win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}iframe{width:100vw;height:100vh}</style></head><body><iframe src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen sandbox="allow-scripts allow-same-origin"></iframe></body></html>`);
+          win.document.close();
+        }
+        return;
+      }
+      // For other URLs, open in a protected wrapper
+      const win = window.open('', '_blank', 'noopener,noreferrer');
+      if (win) {
+        win.document.write(`<!DOCTYPE html><html><head><title>${video.title}</title><style>*{margin:0;padding:0;overflow:hidden}body{background:#000}video{width:100vw;height:100vh}</style></head><body><video src="${url}" controls controlsList="nodownload nofullscreen noremoteplayback" disablePictureInPicture oncontextmenu="return false"></video></body></html>`);
+        win.document.close();
+      }
+    };
+
     return (
       <li key={video.id}>
         <div className="flex items-center gap-3 rounded-lg border border-border px-4 py-3 transition-colors hover:bg-muted/50">
@@ -142,9 +162,12 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
           )}
           <Play className="h-4 w-4 shrink-0 text-primary" />
           {video.url ? (
-            <a href={video.url} target="_blank" rel="noopener noreferrer" className="flex-1 text-sm text-foreground hover:text-primary transition-colors">
+            <button
+              onClick={() => handlePlayVideo(video.url!)}
+              className="flex-1 text-left text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
+            >
               {video.title}
-            </a>
+            </button>
           ) : (
             <span className="flex-1 text-sm text-foreground">{video.title}</span>
           )}
