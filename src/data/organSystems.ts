@@ -3,6 +3,7 @@ import circulatoryImg from "@/assets/circulatory.jpg";
 import digestiveImg from "@/assets/digestive.jpg";
 import nervousImg from "@/assets/nervous.jpg";
 import urinaryImg from "@/assets/urinary.jpg";
+import endocrineImg from "@/assets/endocrine.jpg";
 
 export interface OrganSystem {
   id: string;
@@ -222,6 +223,46 @@ export const organSystems: OrganSystem[] = [
         "人只需要一個腎臟就可以正常生活",
         "膀胱的尿液可以儲存 2-5 小時",
         "腎臟每天產生約 1-2 升尿液，但過濾量達 180 升",
+      ],
+    },
+  },
+  {
+    id: "endocrine",
+    name: "內分泌系統",
+    nameEn: "Endocrine System",
+    password: "IU6",
+    image: endocrineImg,
+    color: "hsl(320 60% 50%)",
+    colorClass: "text-medical-pink",
+    icon: "Zap",
+    organs: ["腦下垂體", "甲狀腺", "副甲狀腺", "腎上腺", "胰島", "松果體"],
+    description: "內分泌系統通過分泌荷爾蒙來調節身體的生長、代謝、生殖和情緒等重要功能。",
+    facts: [
+      { label: "主要內分泌腺", value: "8+ 個" },
+      { label: "已知荷爾蒙種類", value: "50+" },
+      { label: "甲狀腺重量", value: "~20 g" },
+      { label: "腦下垂體大小", value: "~豌豆大" },
+    ],
+    details: {
+      function: "內分泌系統由多個腺體組成，這些腺體分泌荷爾蒙（激素）進入血液，調控身體各種生理過程。腦下垂體被稱為「主腺體」，控制其他內分泌腺的功能。甲狀腺調節代謝速率，腎上腺應對壓力反應，胰島調節血糖水平。",
+      commonDiseases: [
+        { name: "糖尿病", description: "胰島素分泌不足或作用異常，導致血糖調節失衡。" },
+        { name: "甲狀腺功能亢進", description: "甲狀腺過度活躍，分泌過多甲狀腺素，導致代謝加速。" },
+        { name: "甲狀腺功能低下", description: "甲狀腺分泌不足，導致代謝減慢、疲勞和體重增加。" },
+        { name: "庫欣氏症", description: "腎上腺分泌過多皮質醇，導致體重增加、高血壓等症狀。" },
+      ],
+      healthTips: [
+        "保持均衡飲食，攝取足夠碘質",
+        "規律運動有助調節荷爾蒙平衡",
+        "管理壓力，避免長期精神緊張",
+        "定期檢查血糖和甲狀腺功能",
+        "保持充足睡眠以維持荷爾蒙節律",
+      ],
+      funFacts: [
+        "腦下垂體雖只有豌豆大小，卻控制著整個內分泌系統",
+        "腎上腺素可以在數秒內讓心跳加速、瞳孔放大",
+        "人體的生長激素主要在深度睡眠時分泌",
+        "甲狀腺每天只需約 1 微克碘就能維持正常功能",
       ],
     },
   },
