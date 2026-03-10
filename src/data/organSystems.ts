@@ -3,6 +3,7 @@ import circulatoryImg from "@/assets/circulatory.jpg";
 import digestiveImg from "@/assets/digestive.jpg";
 import nervousImg from "@/assets/nervous.jpg";
 import urinaryImg from "@/assets/urinary.jpg";
+import endocrineImg from "@/assets/endocrine.jpg";
 
 export interface OrganSystem {
   id: string;
