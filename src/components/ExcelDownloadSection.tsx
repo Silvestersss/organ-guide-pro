@@ -40,8 +40,8 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
   const [editTitle, setEditTitle] = useState("");
   const [editUrl, setEditUrl] = useState("");
   const [editIsFree, setEditIsFree] = useState(true);
-
-  if (!user) return null;
+  const [playerUrl, setPlayerUrl] = useState<string | null>(null);
+  const [playerTitle, setPlayerTitle] = useState("");
 
   const freeVideos = videos.filter((v) => v.is_free);
   const paidVideos = videos.filter((v) => !v.is_free);
