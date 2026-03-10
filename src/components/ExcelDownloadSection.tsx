@@ -246,6 +246,24 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
       {videos.length === 0 && !showAdd && (
         <p className="text-sm text-muted-foreground">尚未新增影片</p>
       )}
+
+      {/* Video Player Dialog */}
+      <Dialog open={!!playerUrl} onOpenChange={(open) => { if (!open) setPlayerUrl(null); }}>
+        <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-black border-none" onContextMenu={(e) => e.preventDefault()}>
+          <DialogTitle className="sr-only">{playerTitle}</DialogTitle>
+          {playerUrl && (
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe
+                src={playerUrl}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+                sandbox="allow-scripts allow-same-origin"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }
