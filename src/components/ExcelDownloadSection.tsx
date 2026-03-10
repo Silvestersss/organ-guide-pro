@@ -152,7 +152,7 @@ export function ExcelDownloadSection({ systemId }: ExcelDownloadSectionProps) {
           <Play className="h-4 w-4 shrink-0 text-primary" />
           {video.url ? (
             <button
-              onClick={() => handlePlayVideo(video.url!)}
+              onClick={() => { setPlayerUrl(getEmbedUrl(video.url!)); setPlayerTitle(video.title); }}
               className="flex-1 text-left text-sm text-foreground hover:text-primary transition-colors cursor-pointer"
             >
               {video.title}
